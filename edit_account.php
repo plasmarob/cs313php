@@ -33,7 +33,7 @@
             $query = "
                 SELECT
                     1
-                FROM users
+                FROM user
                 WHERE
                     email = :email
             ";
@@ -51,7 +51,7 @@
             }
             catch(PDOException $ex)
             {
-                die("Failed to run query. ");
+                die("Failed_ea1 to run query. ");
             }
             
             // Retrieve results (if any)
@@ -83,7 +83,7 @@
         // Initial query parameter values
         $query_params = array(
             ':email' => $_POST['email'],
-            ':user_id' => $_SESSION['user']['id'],
+            ':user_id' => $_SESSION['user']['user_id'],
         );
         
         // If the user is changing their password, then we need parameter values
@@ -98,7 +98,7 @@
         // construct the rest of it depending on whether or not the user is changing
         // their password.
         $query = "
-            UPDATE users
+            UPDATE user
             SET
                 email = :email
         ";
@@ -117,7 +117,7 @@
         // to update the one record with for the current user.
         $query .= "
             WHERE
-                id = :user_id
+                user_id = :user_id
         ";
         
         try
@@ -128,7 +128,7 @@
         }
         catch(PDOException $ex)
         {
-            die("Failed to run query. ");
+            die("Failed_ea2 to run query. $ex");
         }
         
         // Now that the user's E-Mail address has changed, the data stored in the $_SESSION
@@ -145,17 +145,34 @@
     }
     
 ?>
-<h1>Edit Account</h1>
+
+<html lang="en">
+<head>
+  <title>Commandblock Academy</title>
+  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <link href="css/login.css" rel="stylesheet">
+
+</head>
+<body>
+
+<div id="center">
+<h1>Account</h1>
 <form action="edit_account.php" method="post">
-    Username:<br />
-    <b><?php echo htmlentities($_SESSION['user']['username'], ENT_QUOTES, 'UTF-8'); ?></b>
-    <br /><br />
-    E-Mail Address:<br />
-    <input type="text" name="email" value="<?php echo htmlentities($_SESSION['user']['email'], ENT_QUOTES, 'UTF-8'); ?>" />
-    <br /><br />
-    Password:<br />
-    <input type="password" name="password" value="" /><br />
-    <i>(leave blank if you do not want to change your password)</i>
-    <br /><br />
-    <input type="submit" value="Update Account" />
+    <fieldset class="account-info">
+        Username:<br />
+        <b><?php echo htmlentities($_SESSION['user']['username'], ENT_QUOTES, 'UTF-8'); ?></b>
+        <br /><br />
+        E-Mail Address:<br />
+        <input type="text" name="email" value="<?php echo htmlentities($_SESSION['user']['email'], ENT_QUOTES, 'UTF-8'); ?>" />
+        <br /><br />
+        Password:<br />
+        <input type="password" name="password" value="" /><br />
+        <i>(leave blank if you do not want to change your password)</i>
+        <br /><br />
+    </fieldset>
+    <button type="submit" name="submit" id="send">Update Account</button>
 </form>
+</div>

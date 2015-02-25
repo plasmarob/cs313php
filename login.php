@@ -16,12 +16,12 @@
         // their username.
         $query = "
             SELECT
-                id,
+                user_id,
                 username,
                 password,
                 salt,
                 email
-            FROM users
+            FROM user
             WHERE
                 username = :username
         ";
@@ -39,7 +39,7 @@
         }
         catch(PDOException $ex)
         {
-            die("Failed to run query. "); 
+            die("Failed_L1 to run query. $ex"); 
         }
         
         // This variable tells us whether the user has successfully logged in or not.
@@ -93,7 +93,7 @@
         else
         {
             // Tell the user they failed
-            print("Login Failed.");
+            print("<h4>Login Failed.</h4>");
             
             // Show them their username again so all they have to do is enter a new
             // password.  The use of htmlentities prevents XSS attacks.  You should
@@ -105,14 +105,33 @@
     }
     
 ?>
-<h1>Login</h1>
-<form action="login.php" method="post">
-    Username:<br />
-    <input type="text" name="username" value="<?php echo $submitted_username; ?>" />
-    <br /><br />
-    Password:<br />
-    <input type="password" name="password" value="" />
-    <br /><br />
-    <input type="submit" value="Login" />
-</form>
-<a href="register.php">Register</a>
+
+<html lang="en">
+<head>
+  <title>Commandblock Academy</title>
+  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <link href="css/login.css" rel="stylesheet">
+
+</head>
+<body>
+
+<div id="center">
+    <h1>Login</h1>
+    <form action="login.php" method="post">
+          
+        <fieldset class="account-info">
+            Username:<br />
+            <input type="text" name="username" value="<?php echo $submitted_username; ?>" />
+            <br /><br />
+            Password:<br />
+            <input type="password" name="password" value="" />
+            <br /><br />
+            <button type="submit" name="submit" id="send">Login</button>
+        </fieldset>
+        <a href="register.php">Register</a>
+    </form>
+    
+</div>

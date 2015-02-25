@@ -39,7 +39,7 @@
         $query = "
             SELECT
                 1
-            FROM users
+            FROM user
             WHERE
                 username = :username
         ";
@@ -63,7 +63,7 @@
         }
         catch(PDOException $ex)
         {
-            die("Failed to run query: ");
+            die("Failed_1 to run query: ");
         }
         
         // The fetch() method returns an array representing the "next" row from
@@ -82,7 +82,7 @@
         $query = "
             SELECT
                 1
-            FROM users
+            FROM user
             WHERE
                 email = :email
         ";
@@ -98,7 +98,7 @@
         }
         catch(PDOException $ex)
         {
-            die("Failed to run query: ");
+            die("Failed_2 to run query: ");
         }
         
         $row = $stmt->fetch();
@@ -112,7 +112,7 @@
         // Again, we are using special tokens (technically called parameters) to
         // protect against SQL injection attacks.
         $query = "
-            INSERT INTO users (
+            INSERT INTO user (
                 username,
                 password,
                 salt,
@@ -170,7 +170,7 @@
         }
         catch(PDOException $ex)
         {
-            die("Failed to run query. ");
+            die("Failed_3 to run query. ");
         }
         
         // This redirects the user back to the login page after they register
@@ -183,16 +183,34 @@
     }
     
 ?>
+
+<html lang="en">
+<head>
+  <title>Commandblock Academy</title>
+  
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <link href="css/login.css" rel="stylesheet">
+
+</head>
+<body>
+
+<div id="center">
 <h1>Register</h1>
 <form action="register.php" method="post">
-    Username:<br />
-    <input type="text" name="username" value="" />
+    <fieldset class="account-info">
+        Username:<br />
+        <input type="text" name="username" value="" />
+        <br /><br />
+        E-Mail:<br />
+        <input type="text" name="email" value="" />
+        <br /><br />
+        Password:<br />
+        <input type="password" name="password" value="" />
     <br /><br />
-    E-Mail:<br />
-    <input type="text" name="email" value="" />
-    <br /><br />
-    Password:<br />
-    <input type="password" name="password" value="" />
-    <br /><br />
-    <input type="submit" value="Register" />
+    <button type="submit" name="submit" id="send">Register</button>
+    </fieldset>
+    <a href="login.php">Login</a>
 </form>
+</div>

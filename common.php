@@ -1,7 +1,7 @@
  <?php
 
     // These variables define the connection information for your MySQL database
-    $username = "phpuser";
+    $username = "phpaccess";
     $password = "e5E4gvcArhVxzWGRqvTwMSUF";
     $host = "localhost";
     $dbname = "php";
@@ -13,19 +13,49 @@
     // See Wikipedia for more information on UTF-8:
     // http://en.wikipedia.org/wiki/UTF-8
     $options = array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8');
+
+    // openShiftVar is not getting set... it is null
+    $openShiftVar = getenv('OPENSHIFT_MYSQL_DB_HOST');
     
-    try
+    if ($openShiftVar === null || $openShiftVar == "")
     {
-        // This statement opens a connection to your database using the PDO library
-        // PDO is designed to provide a flexible interface between PHP and many
-        // different types of database servers.  For more information on PDO:
-        // http://us2.php.net/manual/en/class.pdo.php
-        $db = new PDO("mysql:host={$host};dbname={$dbname};charset=utf8", $username, $password, $options);
+        // Not in the openshift environment
+        try
+        {
+            // This statement opens a connection to your database using the PDO library
+            // PDO is designed to provide a flexible interface between PHP and many
+            // different types of database servers.  For more information on PDO:
+            // http://us2.php.net/manual/en/class.pdo.php
+            //$dbHost = "localhost";
+            //$dbUser = "ravidfish";
+            //$dbPassword = "fish7123";
+            $db = new PDO("mysql:host={$host};dbname={$dbname};charset=utf8", $username, $password, $options);
+            //$db = new PDO("mysql:host=$dbHost;dbname=$dbName", $dbUser, $dbPassword);
+        }
+        catch(PDOException $ex)
+        {
+            // If an error occurs while opening a connection to your database, it will
+            // be trapped here.  The script will output an error and stop executing.
+            // Note: On a production website, you should not output $ex->getMessage().
+            // It may provide an attacker with helpful information about your code
+            // (like your database username and password).
+            die("Failed to connect to the database: " . $ex->getMessage());
+        }
     }
-    catch(PDOException $ex)
-    {
-        die("Failed to connect to the database.");
-    }
+    else 
+    { 
+        // In the openshift environment
+        $dbHost = getenv('OPENSHIFT_MYSQL_DB_HOST');
+        $dbPort = getenv('OPENSHIFT_MYSQL_DB_PORT'); 
+        $dbUser = getenv('OPENSHIFT_MYSQL_DB_USERNAME');
+        $dbPassword = getenv('OPENSHIFT_MYSQL_DB_PASSWORD');
+        $db = new PDO("mysql:host=$dbHost:$dbPort;dbname=$dbname", $dbUser, $dbPassword);
+        //$db = new PDO("mysql:host=$dbHost:$dbPort;dbname=$dbName", $dbUser, $dbPassword);
+    } 
+
+
+
+    
     
     // This statement configures PDO to throw an exception when it encounters
     // an error.  This allows us to use try/catch blocks to trap database errors.
